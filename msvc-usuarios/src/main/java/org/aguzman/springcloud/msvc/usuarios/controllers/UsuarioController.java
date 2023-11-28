@@ -52,8 +52,7 @@ public class UsuarioController {
 
         }
 
-        usuario.setIdentificador(CrearIdentificador.generarIdentificador());
-        usuario.setId(usuario.getIdentificador());
+        usuario.setId(CrearIdentificador.generarIdentificador());
 
         Map<String, String> res = new HashMap<>();
 

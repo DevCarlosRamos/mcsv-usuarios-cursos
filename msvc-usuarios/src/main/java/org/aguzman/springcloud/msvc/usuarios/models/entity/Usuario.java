@@ -22,16 +22,6 @@ public class Usuario {
     @NotBlank
     private String password;
 
-    @Transient
-    private String identificador;
-
-    public String getIdentificador() {
-        return identificador;
-    }
-
-    public void setIdentificador(String identificador) {
-        this.identificador = identificador;
-    }
 
     public String getId() {
         return id;
