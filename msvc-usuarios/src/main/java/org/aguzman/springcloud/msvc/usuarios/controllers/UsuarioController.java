@@ -2,6 +2,7 @@ package org.aguzman.springcloud.msvc.usuarios.controllers;
 
 import org.aguzman.springcloud.msvc.usuarios.models.entity.Usuario;
 import org.aguzman.springcloud.msvc.usuarios.services.UsuarioService;
+import org.aguzman.springcloud.msvc.usuarios.utils.CrearIdentificador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> detalle(@PathVariable Long id) {
+    public ResponseEntity<?> detalle(@PathVariable String id) {
         Optional<Usuario> usuarioOptional = service.porId(id);
         if (usuarioOptional.isPresent()) {
             return ResponseEntity.ok(usuarioOptional.get());
@@ -38,16 +39,32 @@ public class UsuarioController {
             return validar(result);
         }
 
+        if (!usuario.getNombre().isEmpty() && service.existePorNombre(usuario.getNombre())) {
+            return ResponseEntity.badRequest()
+                    .body(Collections
+                            .singletonMap("mensaje", "Ya existe un usuario con este nombre!"));
+        }
+
         if (!usuario.getEmail().isEmpty() && service.existePorEmail(usuario.getEmail())) {
             return ResponseEntity.badRequest()
                     .body(Collections
                             .singletonMap("mensaje", "Ya existe un usuario con ese correo electronico!"));
+
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.guardar(usuario));
+
+        usuario.setIdentificador(CrearIdentificador.generarIdentificador());
+        usuario.setId(usuario.getIdentificador());
+
+        Map<String, String> res = new HashMap<>();
+
+        res.put("IDENTIFICADOR", service.guardar(usuario).getId());
+
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editar(@Valid @RequestBody Usuario usuario, BindingResult result, @PathVariable Long id) {
+    public ResponseEntity<?> editar(@Valid @RequestBody Usuario usuario, BindingResult result, @PathVariable String id) {
 
         if (result.hasErrors()) {
             return validar(result);
@@ -73,7 +90,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id) {
+    public ResponseEntity<?> eliminar(@PathVariable String id) {
         Optional<Usuario> o = service.porId(id);
         if (o.isPresent()) {
             service.eliminar(id);
@@ -83,7 +100,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/usuarios-por-curso")
-    public ResponseEntity<?> obtenerAlumnosPorCurso(@RequestParam List<Long> ids){
+    public ResponseEntity<?> obtenerAlumnosPorCurso(@RequestParam List<String> ids){
         return ResponseEntity.ok(service.listarPorIds(ids));
     }
 

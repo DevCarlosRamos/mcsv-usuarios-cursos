@@ -27,7 +27,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 
     @Transactional(readOnly = true)
     @Override
-    public Optional<Usuario> porId(Long id) {
+    public Optional<Usuario> porId(String id) {
         return repository.findById(id);
     }
 
@@ -39,14 +39,14 @@ public class UsuarioServiceImpl implements UsuarioService{
 
     @Override
     @Transactional
-    public void eliminar(Long id) {
+    public void eliminar(String id) {
         repository.deleteById(id);
         client.eliminarCursoUsuarioPorId(id);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Usuario> listarPorIds(Iterable<Long> ids) {
+    public List<Usuario> listarPorIds(Iterable<String> ids) {
         return (List<Usuario>) repository.findAllById(ids);
     }
 
@@ -58,5 +58,9 @@ public class UsuarioServiceImpl implements UsuarioService{
     @Override
     public boolean existePorEmail(String email) {
         return repository.existsByEmail(email);
+    }
+
+    public boolean existePorNombre(String nombre) {
+        return repository.existsByNombre(nombre);
     }
 }

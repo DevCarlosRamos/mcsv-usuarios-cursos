@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface CursoClienteRest {
 
     @DeleteMapping("/eliminar-curso-usuario/{id}")
-    void eliminarCursoUsuarioPorId(@PathVariable Long id);
+    void eliminarCursoUsuarioPorId(@PathVariable String id);
 }

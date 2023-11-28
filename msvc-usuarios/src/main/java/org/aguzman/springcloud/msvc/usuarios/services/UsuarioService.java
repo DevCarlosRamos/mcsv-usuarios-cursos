@@ -7,11 +7,12 @@ import java.util.Optional;
 
 public interface UsuarioService {
     List<Usuario> listar();
-    Optional<Usuario> porId(Long id);
+    Optional<Usuario> porId(String id);
     Usuario guardar(Usuario usuario);
-    void eliminar(Long id);
-    List<Usuario> listarPorIds(Iterable<Long> ids);
+    void eliminar(String id);
+    List<Usuario> listarPorIds(Iterable<String> ids);
 
     Optional<Usuario> porEmail(String email);
     boolean existePorEmail(String email);
+    boolean existePorNombre(String nombre);
 }

@@ -8,10 +8,10 @@ import javax.validation.constraints.*;
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @NotBlank
+    @Column(unique = true)
     private String nombre;
 
     @NotEmpty
@@ -22,11 +22,22 @@ public class Usuario {
     @NotBlank
     private String password;
 
-    public Long getId() {
+    @Transient
+    private String identificador;
+
+    public String getIdentificador() {
+        return identificador;
+    }
+
+    public void setIdentificador(String identificador) {
+        this.identificador = identificador;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
